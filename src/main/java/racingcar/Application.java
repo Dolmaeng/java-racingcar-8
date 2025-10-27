@@ -3,6 +3,7 @@ package racingcar;
 import camp.nextstep.edu.missionutils.Console;
 import camp.nextstep.edu.missionutils.Randoms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
@@ -19,54 +20,50 @@ public class Application {
         int rounds = InputParser.parseRounds(roundsLine);
 //        System.out.println("Test Inputs: " + rounds); /* 시도 횟수 입력 테스트 */
 
-        //경주 실행
+        // 게임 생성
         RacingGame game = new RacingGame(names, rounds);
-        MoveRules rule = new RandomMoveRule();
-        game.play(rule);
 
-        /*************************/
-//        // 출력 테스트용 (game.play(rule) 주석 처리 후 실행)
-//        System.out.println();
-//        System.out.println("==== GAME START ====");
-//        for (int r = 1; r <= rounds; r = r + 1) {
-//            System.out.println("[Round " + r + "]");
-//            for (Car car : game.getCars()) {
-//                int value = Randoms.pickNumberInRange(0, 9);
-//                boolean shouldMove = value >= 4;
-//                System.out.println("  " + car.getName() + " → random: " + value
-//                        + (shouldMove ? " (move)" : " (stay)"));
-//                if (shouldMove) {
-//                    car.move();
-//                }
-//            }
-//            System.out.println();
-//        }
 
-        System.out.println("==== GAME RESULT ====");
-        for (Car car : game.getCars()) {
-            System.out.print(car.getName() + " : ");
-            for (int i = 0; i < car.getPosition(); i = i + 1) {
-                System.out.print("-");
+        // 라운드별 게임 진행 및 목표 포맷에 맞게 출력
+        System.out.println();
+        System.out.println("실행 결과");
+
+        for (int r = 1; r <= rounds; r = r + 1) {
+            // 각 차에 대해 난수 생성 및 이동 판단
+            for (Car car : game.getCars()) {
+                int value = Randoms.pickNumberInRange(0, 9);
+                boolean shouldMove = value >= 4;
+                if (shouldMove) {
+                    car.move();
+                }
+            }
+
+            // 라운드 결과 출력
+            for (Car car : game.getCars()) {
+                System.out.print(car.getName());
+                System.out.print(" : ");
+                int pos = car.getPosition();
+                for (int i = 0; i < pos; i = i + 1) {
+                    System.out.print("-");
+                }
+                System.out.println();
             }
             System.out.println();
         }
-        System.out.println("=====================");
-        /*************************/
 
-        //최종 Winner 출력
+        // Winner 출력
         int max = 0;
         for (Car car : game.getCars()) {
             if (car.getPosition() > max) {
                 max = car.getPosition();
             }
         }
-        java.util.List<String> winnerNames = new java.util.ArrayList<>();
+        List<String> winnerNames = new ArrayList<>();
         for (Car car : game.getCars()) {
             if (car.getPosition() == max) {
                 winnerNames.add(car.getName());
             }
         }
-
         StringBuilder winnersLine = new StringBuilder();
         for (int i = 0; i < winnerNames.size(); i = i + 1) {
             winnersLine.append(winnerNames.get(i));
