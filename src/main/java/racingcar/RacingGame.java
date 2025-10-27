@@ -14,37 +14,20 @@ final class RacingGame {
         if (rounds <= 0) {
             throw new IllegalArgumentException("라운드 수는 1 이상의 정수여야 합니다.");
         }
+
         for (String n : names) {
             cars.add(new Car(n));
         }
-        this.rounds = rounds;
+        this.rounds = rounds; //테스트용 보관
     }
 
-    /**
-     * rounds 만큼 진행하며 MoveRules 에 따라 각 Car 의 position 을 업데이트
-     */
-    void play(MoveRules rule) {
-        if (rule == null) {
-            throw new IllegalArgumentException("MoveRules 가 null 입니다.");
-        }
-
-        for (int r = 0; r < rounds; r = r + 1) {
-            playOneRound(rule);
-        }
-    }
-
-    // Car 마다 rule 체크 후, move
-    private void playOneRound(MoveRules rule) {
-        for (Car car : cars) {
-            boolean shouldMove = rule.shouldMove();
-            if (shouldMove) {
-                car.move();
-            }
-        }
-    }
-
-    // get 메소드
+    /** 자동차 조회 get메소드 */
     List<Car> getCars() {
         return new ArrayList<>(cars);
+    }
+
+    /** round 조회 */
+    int getRounds() {
+        return rounds;
     }
 }
