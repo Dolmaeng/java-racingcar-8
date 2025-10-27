@@ -17,7 +17,40 @@ public class Application {
         System.out.println("시도할 횟수는 몇 회인가요?");
         String roundsLine = Console.readLine();
         int rounds = InputParser.parseRounds(roundsLine);
-        System.out.println("Test Inputs: " + rounds); /* 시도 횟수 입력 테스트 */
+//        System.out.println("Test Inputs: " + rounds); /* 시도 횟수 입력 테스트 */
 
+        //경주 실행
+        RacingGame game = new RacingGame(names, rounds);
+        MoveRules rule = new RandomMoveRule();
+        game.play(rule);
+
+        /*************************/
+        // 출력 테스트용 (game.play(rule) 주석 처리 후 실행)
+        System.out.println();
+        System.out.println("==== GAME START ====");
+        for (int r = 1; r <= rounds; r = r + 1) {
+            System.out.println("[Round " + r + "]");
+            for (Car car : game.getCars()) {
+                int value = Randoms.pickNumberInRange(0, 9);
+                boolean shouldMove = value >= 4;
+                System.out.println("  " + car.getName() + " → random: " + value
+                        + (shouldMove ? " (move)" : " (stay)"));
+                if (shouldMove) {
+                    car.move();
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println("==== GAME RESULT ====");
+        for (Car car : game.getCars()) {
+            System.out.print(car.getName() + " : ");
+            for (int i = 0; i < car.getPosition(); i = i + 1) {
+                System.out.print("-");
+            }
+            System.out.println();
+        }
+        System.out.println("=====================");
+        /*************************/
     }
 }
